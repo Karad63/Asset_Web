@@ -1,0 +1,58 @@
+﻿@model Asset_Web.Models.Product
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Product</h4>
+
+    @{
+        var itemCurrency = Model.ProdOffice.Currency.CurrencyName;       
+    }
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ProdCat)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ProdCat.CatName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ProdModel.Brand)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ProdModel.Brand.BrandName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ProdModel)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ProdModel.BrandModelName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ProdPrice)
+        </dt>
+        <dd class="col-sm-10">
+            @itemCurrency @Model.ProdPrice.ToString("N")            
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ProdPurchaseDate)
+        </dt>
+        <dd class="col-sm-10">
+            @Model.ProdPurchaseDate.ToShortDateString()           
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ProdOffice)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ProdOffice.OfficeName)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.ProductId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

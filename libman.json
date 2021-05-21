@@ -1,0 +1,14 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "bootstrap-table@1.18.2",
+      "destination": "wwwroot/lib/bootstrap-table/"
+    },
+    {
+      "library": "Chart.js@2.9.4",
+      "destination": "wwwroot/Chart.js/"
+    }
+  ]
+}

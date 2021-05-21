@@ -1,0 +1,519 @@
+﻿@{
+    ViewData["Title"] = "ShowSummaryReport";
+}
+
+<span class="display-4">Summary Report </span><span class="display-4 text-info"> All assets</span>
+
+<div class="row">
+    <p> </p>
+</div>
+
+<div class="row border rounded p-2">
+    <div class="col-md-12">
+        <h5>Total sum of @ViewData["count"] assets: @ViewData["total"] USD</h5>
+    </div>
+</div>
+<div class="row border rounded p-2">
+    <div class="col-md-4 border rounded p-2">
+        <h6><u>Divided by offices:</u></h6>
+        <table style="width:100%" cellpadding="0">
+            <thead>
+                <tr>
+                    <th>
+                        <small><b>Office</b></small>
+                    </th>
+                    <th>
+                        <small><b>Pcs</b></small>
+                    </th>
+                    <th style="text-align:right">
+                        <small><b>Sum</b></small>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (List<string> subList in ViewData["office"] as IList<List<string>>)
+                {
+                    <tr>
+                        <td>
+                            <small>@subList[0]</small>
+                        </td>
+                        <td>
+                            <small>@subList[1]</small>
+                        </td>
+                        <td align="right">
+                            <small>@subList[2]</small>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-1"></div>
+    <div class="col-md-6">
+        <canvas id="officeChart" width="500" height="300"></canvas>
+    </div>
+    <div class="col-md-1"></div>
+</div>
+
+<div class="row border rounded p-2">
+    <div class="col-md-4 border rounded p-2">
+        <h6><u>Divided by categories:</u></h6>
+
+        <table style="width:100%" cellpadding="0">
+            <thead>
+                <tr>
+                    <th>
+                        <small><b>Category</b></small>
+                    </th>
+                    <th>
+                        <small><b>Pcs</b></small>
+                    </th>
+                    <th style="text-align:right">
+                        <small><b>Sum</b></small>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (List<string> subList in ViewData["category"] as IList<List<string>>)
+                {
+                    <tr>
+                        <td>
+                            <small>@subList[0]</small>
+                        </td>
+                        <td>
+                            <small>@subList[1]</small>
+                        </td>
+                        <td align="right">
+                            <small>@subList[2]</small>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-1"></div>
+    <div class="col-md-6">
+        <canvas id="categoryChart" width="500" height="300"></canvas>
+    </div>
+    <div class="col-md-1"></div>
+</div>
+
+<div class="row border rounded p-2">
+    <div class="col-md-4 border p-2">
+        <h6><u>Divided by brands:</u></h6>
+        <table style="width:100%" cellpadding="0">
+            <thead>
+                <tr>
+                    <th>
+                        <small><b>Brand</b></small>
+                    </th>
+                    <th>
+                        <small><b>Pcs</b></small>
+                    </th>
+                    <th style="text-align:right">
+                        <small><b>Sum</b></small>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (List<string> subList in ViewData["brand"] as IList<List<string>>)
+                {
+                    <tr>
+                        <td>
+                            <small>@subList[0]</small>
+                        </td>
+                        <td>
+                            <small>@subList[1]</small>
+                        </td>
+                        <td align="right">
+                            <small>@subList[2]</small>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>    
+    <div class="col-md-4">
+        <canvas id="brandChart" width="400" height="300"></canvas>
+    </div>
+    <div class="col-md-4">
+        <canvas id="brandChart2" width="400" height="300"></canvas>
+    </div>
+</div>
+
+<div class="row border rounded p-2">
+    <div class="col-md-4 border p-2">
+        <h6><u>Divided by brandmodels:</u></h6>
+        <table style="width:100%" cellpadding="0">
+            <thead>
+                <tr>
+                    <th>
+                        <small><b>Brandmodel</b></small>
+                    </th>
+                    <th>
+                        <small><b>Pcs</b></small>
+                    </th>
+                    <th style="text-align:right">
+                        <small><b>Sum</b></small>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (List<string> subList in ViewData["brandModel"] as IList<List<string>>)
+                {
+                    <tr>
+                        <td>
+                            <small>@subList[0]</small>
+                        </td>
+                        <td>
+                            <small>@subList[1]</small>
+                        </td>
+                        <td align="right">
+                            <small>@subList[2]</small>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-1"></div>
+    <div class="col-md-6">
+        <canvas id="brandModelChart" width="500" height="300"></canvas>
+    </div>
+    <div class="col-md-1"></div>
+</div>
+
+
+@*<div class="row">
+    <div class="col-md-4">
+        <canvas id="myChart" width="400" height="400" style="border:1px solid #000000;"></canvas>
+    </div>
+</div>*@
+
+<script>
+    var ctx = document.getElementById('officeChart').getContext('2d');
+    var items = [];
+    var itemsSum = [];
+    var itemNumber = [];
+    @foreach (List<string> subList in ViewData["office"] as IList<List<string>>)
+    {
+        @:items.push("@subList[0]");
+        @:itemsSum.push("@subList[3]");
+        @:itemNumber.push("@subList[1]");
+    }
+    var myChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: items,
+            datasets: [{
+                label: 'Sum',
+                data: itemsSum,                
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }, {
+                label: 'Quantity',
+                    data: itemNumber,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+            }]
+        },
+        options: {
+            legend: {
+                position: 'right'
+            },
+            scales: {
+                yAxes: [{
+                    display: false,
+                    ticks: {
+                    beginAtZero: true
+                    }
+                }]
+            },
+            title: {
+                display: true,
+                text: 'Outer circle: Sum, Inner circle: Quantity'
+            }
+        }
+    });
+</script>
+
+<script>
+    var ctx = document.getElementById('categoryChart').getContext('2d');
+    var items = [];
+    var itemsSum = [];
+    var itemNumber = [];
+    @foreach (List<string> subList in ViewData["category"] as IList<List<string>>)
+    {
+        @:items.push("@subList[0]");
+        @:itemsSum.push("@subList[3]");
+        @:itemNumber.push("@subList[1]");
+    }
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: items,
+            datasets: [{
+                label: 'Quantity',                
+                yAxisID: 'left-y-axis',
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',                    
+                data: itemNumber
+            }, {
+                label: 'Sum',
+                yAxisID: 'right-y-axis',
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                data: itemsSum
+            }]
+        },
+        options: {
+            legend: {
+                position: 'right'
+            },
+            scales: {                
+                yAxes: [{ 
+                    id: 'left-y-axis',
+                    type: 'linear',
+                    position: 'left',
+                    ticks: {
+                        beginAtZero: true
+                    },
+                    gridLines: {
+                        display: false
+                    }
+                }, {
+                    id: 'right-y-axis',
+                    type: 'linear',
+                    position: 'right',
+                    ticks: {
+                        beginAtZero: true
+                    },
+                    gridLines: {
+                            display: false
+                    }
+                }]
+            }
+        }
+    });
+</script>
+
+<script>
+    var ctx = document.getElementById('brandChart').getContext('2d');
+    var items = [];
+    var itemNumber = [];
+    @foreach (List<string> subList in ViewData["brand"] as IList<List<string>>)
+    {
+        @:items.push("@subList[0]");
+         @:itemNumber.push("@subList[1]");
+    }
+    var myChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: items,
+            datasets: [{
+                data: itemNumber,
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            legend: {
+                position: 'right'
+            },
+            scales: {
+                yAxes: {
+                    display: false
+                }
+            },
+            title: {
+                display: true,
+                text: 'Quantity'
+            }
+        }
+    });
+</script>
+
+<script>
+    var ctx = document.getElementById('brandChart2').getContext('2d');
+    var items = [];
+    var itemsSum = [];
+    @foreach (List<string> subList in ViewData["brand"] as IList<List<string>>)
+    {
+        @:items.push("@subList[0]");
+         @:itemsSum.push("@subList[3]");
+    }
+    var myChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: items,
+            datasets: [{
+                data: itemsSum,
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            legend: {
+                position: 'right'
+            },
+            scales: {
+                yAxes: {
+                    display: false
+                }
+            },
+            title: {
+                display: true,
+                text: 'Sum'
+            }
+        }
+    });
+</script>
+
+<script>
+    var ctx = document.getElementById('brandModelChart').getContext('2d');
+    var items = [];
+    var itemsSum = [];
+    @foreach (List<string> subList in ViewData["brandModel"] as IList<List<string>>)
+    {
+        @:items.push("@subList[0]");
+         @:itemsSum.push("@subList[3]");
+    }
+    var myChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: items,
+            datasets: [{
+                data: itemsSum,
+                backgroundColor: [
+                    'rgba(166, 0, 172, 0.5)',
+                    'rgba(115, 0, 207, 0.5)',
+                    'rgba(6, 0, 253, 0.5)',
+                    'rgba(2, 138, 224, 0.5)',
+                    'rgba(81, 223, 1, 0.5)',
+                    'rgba(205, 255, 0, 0.5)',
+                    'rgba(248, 255, 1, 0.5)',
+                    'rgba(255, 161, 1, 0.5)',
+                    'rgba(255, 6, 0, 0.5)',
+                    'rgba(239, 0, 117, 0.5)'
+                ],                
+                borderWidth: 1
+            }]
+        },
+        options: {
+            legend: {
+                position: 'right'
+            },
+            scales: {
+                yAxes: {
+                    display: false
+                }
+            },
+            title: {
+                display: true,
+                text: 'Quantity'
+            }
+        }
+    });
+</script>
+
+@*<script>
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+            datasets: [{
+                label: '# of Votes',
+                data: [12, 19, 3, 5, 2, 3],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            legend: {
+                position: 'right'
+            },
+            scales: {
+                yAxes: [{
+                    display: false,
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
+</script>*@

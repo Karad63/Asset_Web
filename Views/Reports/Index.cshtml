@@ -1,0 +1,90 @@
+﻿@model Asset_Web.ViewModels.ProductViewModel
+
+@{
+    ViewData["Title"] = "Reports Page";
+}
+
+<div class="row mb-3">
+    <h1 class="display-4">Reports</h1>
+    <pre>   </pre>
+    <img src="~/images/icons8-documents-80.png" />
+    <pre>   </pre>
+    <img src="~/images/icons8-combo-chart-80.png" />
+    <pre>   </pre>
+    <img src="~/images/icons8-pie-chart-80.png" />
+</div>
+
+<div class="row">
+    <pre>   </pre>
+</div>
+
+
+<form asp-action="ShowOutgoingAssets" method="post">
+    <div class="row mb-2">
+        <p class="mr-3 col-sm-3">Show outgoing assets </p>
+        <div class="col-sm-2">
+            <input type="submit" value="Show Report" class="btn btn-info mb-2" />
+        </div>
+    </div>
+</form>
+
+<form asp-action="ShowSummaryReport" method="post">
+    <div class="row mb-2">
+        <p class="mr-3 col-sm-3">Show a summary of all assets </p>
+        <div class="col-sm-2">
+            <input type="submit" value="Show Report" class="btn btn-info mb-2" />
+        </div>
+    </div>
+</form>
+
+
+<div>
+    <br />
+    <p>Show detailed report by:</p>
+</div>
+
+<form asp-action="ShowOfficeReport" method="post">
+    <div class="row mb-3 col-md-8">
+        <label asp-for="OfficeId" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-4">
+            <select asp-for="OfficeId" class="form-control" asp-items="ViewBag.OfficeId" id="id" name="id"></select>
+        </div>
+        <div>
+            <input type="submit" value="Show Report" class="btn btn-info" />
+        </div>
+    </div>
+</form>
+<form asp-action="ShowCategoryReport" method="post">
+    <div class="row mb-3 col-md-8">
+        <label asp-for="CategoryId" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-4">
+            <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId" id="id" name="id"></select>
+        </div>
+        <div>
+            <input type="submit" value="Show Report" class="btn btn-info" />
+        </div>
+    </div>
+</form>
+<form asp-action="ShowBrandReport" method="post">
+    <div class="row mb-3 col-md-8">
+        <label asp-for="BrandId" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-4">
+            <select asp-for="BrandId" class="form-control" asp-items="ViewBag.BrandList" id="id" name="id"></select>
+        </div>
+        <div>
+            <input type="submit" value="Show Report" class="btn btn-info" />
+        </div>
+    </div>
+</form>
+<form asp-action="ShowBrandModelReport" method="post">
+    <div class="row mb-3 col-md-8">
+        <label asp-for="BrandModelId" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-4">
+            <select asp-for="BrandModelId" class="form-control" asp-items="ViewBag.BrandModelId" id="id" name="id"></select>
+        </div>
+        <div>
+            <input type="submit" value="Show Report" class="btn btn-info" />
+        </div>
+    </div>
+</form>
+

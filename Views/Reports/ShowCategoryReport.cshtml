@@ -1,0 +1,175 @@
+﻿@model IEnumerable<Asset_Web.Models.Product>
+
+@{
+    ViewData["Title"] = "ShowCategoryReport";
+}
+
+<span class="display-4">Category Report </span><span class="display-4 text-info"> @ViewData["category"]</span>
+
+<div class="row">
+    <p> </p>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="table-responsive">
+            <table class="table table-sm">
+                <thead class="table-info">
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ProdOffice)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ProdModel.Brand)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ProdModel)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ProdPurchaseDate)
+                        </th>
+                        <th style="text-align:right">
+                            @Html.DisplayNameFor(model => model.ProdPrice)
+                        </th>
+                        <th style="text-align:right">
+                            Value in USD
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        var itemCurrency = new Currency();
+                        itemCurrency = item.ProdOffice.Currency;
+                        var priceUSD = item.ProdPrice * itemCurrency.ExRateUSD;
+                        
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ProdOffice.OfficeName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ProdModel.Brand.BrandName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ProdModel.BrandModelName)
+                            </td>
+                            <td>
+                                @item.ProdPurchaseDate.ToShortDateString()
+                            </td>
+                            <td align="right">
+                                @itemCurrency.CurrencyName  @item.ProdPrice.ToString("N")
+                            </td>
+                            <td align="right">
+                                @priceUSD.ToString("N")
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="border rounded p-2">
+        <h5>Total sum of @ViewData["count"] assets: @ViewData["total"] USD</h5>
+        <hr />
+        <h6><u>Divided by offices:</u></h6>
+        <table style="width:100%" cellpadding="0">
+            <thead>
+                <tr>
+                    <th>
+                        <small><b>Office</b></small>
+                    </th>
+                    <th>
+                        <small><b>Pcs</b></small>
+                    </th>
+                    <th style="text-align:right">
+                        <small><b>Sum</b></small>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (List<string> subList in ViewData["office"] as IList<List<string>>)
+                {
+                    <tr>
+                        <td>
+                            <small>@subList[0]</small>
+                        </td>
+                        <td>
+                            <small>@subList[1]</small>
+                        </td>
+                        <td align="right">
+                            <small>@subList[2]</small>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <hr />
+
+        <h6><u>Divided by brands:</u></h6>
+
+        <table style="width:100%" cellpadding="0">
+            <thead>
+                <tr>
+                    <th>
+                        <small><b>Brand</b></small>
+                    </th>
+                    <th>
+                        <small><b>Pcs</b></small>
+                    </th>
+                    <th style="text-align:right">
+                        <small><b>Sum</b></small>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (List<string> subList in ViewData["brand"] as IList<List<string>>)
+                {
+                    <tr>
+                        <td>
+                            <small>@subList[0]</small>
+                        </td>
+                        <td>
+                            <small>@subList[1]</small>
+                        </td>
+                        <td align="right">
+                            <small>@subList[2]</small>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <hr />
+        <h6><u>Divided by brandmodels:</u></h6>
+        <table style="width:100%" cellpadding="0">
+            <thead>
+                <tr>
+                    <th>
+                        <small><b>Brandmodel</b></small>
+                    </th>
+                    <th>
+                        <small><b>Pcs</b></small>
+                    </th>
+                    <th style="text-align:right">
+                        <small><b>Sum</b></small>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (List<string> subList in ViewData["brandModel"] as IList<List<string>>)
+                {
+                    <tr>
+                        <td>
+                            <small>@subList[0]</small>
+                        </td>
+                        <td>
+                            <small>@subList[1]</small>
+                        </td>
+                        <td align="right">
+                            <small>@subList[2]</small>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>          
+    </div>
+</div>

@@ -1,0 +1,83 @@
+﻿@model IEnumerable<Asset_Web.Models.BrandModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+@*<h1>Models</h1>*@
+<div class="row mb-3 mt-3">
+    <h1 class="display-4">Models</h1>
+    <pre>   </pre>
+    <img src="~/images/icons8-android-80.png" />
+    <pre>   </pre>
+    <img src="~/images/icons8-windows-client-80.png" />
+    <pre>   </pre>
+    <img src="~/images/icons8-iphone-x-80.png" />
+    <pre>   </pre>
+    <img src="~/images/icons8-mac-client-80.png" />
+</div>
+<p>
+    <a asp-action="Create" class="text-info">Create New</a>
+</p>
+<table class="table table-sm"
+       id="table"
+       data-toggle="table"
+       data-search="true"
+       data-minimum-count-columns="3"
+       data-show-button-text="true"
+       data-icons-prefix="icon"
+       data-icons="icons"
+       data-pagination="true"
+       data-page-list="[10, 25, 50, 100, all]"
+       data-show-footer="false"
+       data-search-align="right"
+       data-show-search-button="true"
+       data-show-search-clear-button="true"
+       data-buttons-align="right"
+       data-buttons-class="info"
+       data-page-class="info"
+       data-buttons-prefix="btn-sm btn"
+       data-sortable="true">
+    <thead class="table-info">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Brand)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BrandModelName)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Brand.BrandName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BrandModelName)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.BrandModelId" class="text-info">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.BrandModelId" class="text-info">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.BrandModelId" class="text-info">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<script>
+    window.icons = {
+        refresh: 'ion-md-refresh',
+        columns: 'ion-md-menu',
+        toggle: 'ion-md-expand'
+    }
+
+    $(document).ready(function () {
+        $('#table').DataTable();
+    });
+
+</script>
+

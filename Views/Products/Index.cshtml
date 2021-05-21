@@ -1,0 +1,133 @@
+﻿@model IEnumerable<Asset_Web.Models.Product>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="row mb-3 mt-3">
+    <h1 class="display-4">Products</h1>
+    <pre>   </pre>
+    <img src="~/images/icons8-multiple-devices-80.png" />
+</div>
+
+<p>
+    <a asp-action="Create" class="text-info">Create New</a>
+</p>
+
+<div class="bg-light">
+    <p class="text-danger">
+        <b>RED TEXT = Assets with less thee three months to expiration date or already expired</b><br />
+        <b class="text-warning">ORANGE TEXT = Assets with less then six months to expiration date</b>
+    </p>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-sm"
+           id="table"
+           data-toggle="table"
+           data-search="true"          
+           data-minimum-count-columns="3"
+           data-show-button-text="true"
+           data-icons-prefix="icon"
+           data-icons="icons"
+           data-pagination="true"
+           data-page-list="[10, 25, 50, 100, all]"
+           data-show-footer="false"
+           data-search-align="right"         
+           data-show-search-button="true"
+           data-show-search-clear-button="true"
+           data-buttons-align="right"
+           data-buttons-class="info"
+           data-page-class="info"
+           data-buttons-prefix="btn-sm btn"          
+           data-sortable="true">
+
+        <thead class="table-info">
+            <tr>
+                <th data-sortable="true">
+                    @Html.DisplayNameFor(model => model.ProdCat)
+                </th>
+                <th data-sortable="true">
+                    @Html.DisplayNameFor(model => model.ProdModel.Brand)
+                </th>
+                <th data-sortable="true">
+                    @Html.DisplayNameFor(model => model.ProdModel)
+                </th>
+                <th data-sortable="true">
+                    @Html.DisplayNameFor(model => model.ProdPrice)
+                </th>
+                <th data-sortable="true">
+                    Value in USD
+                </th>
+                <th data-sortable="true">
+                    @Html.DisplayNameFor(model => model.ProdPurchaseDate)
+                </th>
+                <th data-sortable="true">
+                    @Html.DisplayNameFor(model => model.ProdOffice)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody class="bg-light">
+            @foreach (var item in Model)
+            {
+                // Check if product is about to or is expired. Purchase date less then 3 or 6 months away from 3 years.
+                // Less then 3 months -> red text, less the 6 months -> orange text.
+                int monthLeft = 0;
+                if (item.ProdPurchaseDate.AddYears(3) <= DateTime.Today.AddMonths(6))
+                {
+                    monthLeft = 6;
+                }
+                if (item.ProdPurchaseDate.AddYears(3) <= DateTime.Today.AddMonths(3))
+                {
+                    monthLeft = 3;
+                }
+                var itemCurrency = new Currency();
+                itemCurrency = item.ProdOffice.Currency;
+                var priceUSD = item.ProdPrice * itemCurrency.ExRateUSD;               
+
+                <tr class="@(monthLeft == 3 ? "text-danger" : (monthLeft == 6 ? "text-warning" : ""))">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProdCat.CatName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProdModel.Brand.BrandName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProdModel.BrandModelName)
+                    </td>
+                    <td>
+                        @itemCurrency.CurrencyName @item.ProdPrice.ToString("N")
+                    </td>
+                    <td>
+                        @priceUSD.ToString("N")
+                    </td>
+                    <td>
+                        @item.ProdPurchaseDate.ToShortDateString()
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProdOffice.OfficeName)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.ProductId" class="text-info">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.ProductId" class="text-info">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.ProductId" class="text-info">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<script>
+    window.icons = {
+        refresh: 'ion-md-refresh',
+        columns: 'ion-md-menu',
+        toggle: 'ion-md-expand'
+    }
+
+    $(document).ready(function () {
+        $('#table').DataTable();
+    });
+
+</script>
+
